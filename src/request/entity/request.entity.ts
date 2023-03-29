@@ -1,19 +1,34 @@
 import { StatusEnum } from "src/enum/Status.enum";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Molecule } from "src/molecule/entity/molecule.entity";
+import { Target } from "src/target/entity/target.entity";
+import { User } from "src/user/entity/user.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Request {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column({})
-    moleculeID: string;
+    @ManyToOne(
+        () => Molecule,
+        (Molecule) => Molecule.requests,
+        { cascade: true },
+    )
+    molecule: Molecule;
 
-    @Column({})
-    targetID: string;
+    @ManyToOne(
+        () => Target,
+        (Target) => Target.requests,
+        { cascade: true },
+    )
+    target: Target;
 
-    @Column({})
-    userID: string;
+    @ManyToOne(
+        () => User,
+        (User) => User.requests,
+        { cascade: true },
+    )
+    user: User;
 
     @Column({
         type: 'enum',

@@ -10,6 +10,7 @@ export class Result {
 
   @Column({
     nullable: false,
+    default: false,
   })
   active: boolean;
 

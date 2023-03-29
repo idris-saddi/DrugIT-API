@@ -1,4 +1,5 @@
 import { RoleEnum } from 'src/enum/Role.enum';
+import { Request } from 'src/request/entity/request.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -7,6 +8,7 @@ import {
   DeleteDateColumn,
   Entity,
   Unique,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -66,4 +68,11 @@ export class User {
     nullable: true,
   })
   deleted_at: Date;
+
+  @OneToMany(
+    () => Request, 
+    (Request) => Request.user, 
+    { cascade: true }
+  )
+  requests: Request[];
 }

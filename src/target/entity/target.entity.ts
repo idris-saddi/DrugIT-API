@@ -1,3 +1,4 @@
+import { Request } from 'src/request/entity/request.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -5,6 +6,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -32,4 +34,11 @@ export class Target {
     nullable: true,
   })
   deleted_at: Date;
+
+  @OneToMany(
+    () => Request, 
+    (Request) => Request.target, 
+    { cascade: true }
+  )
+  requests: Request[];
 }
