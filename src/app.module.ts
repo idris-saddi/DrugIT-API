@@ -8,6 +8,7 @@ import { TargetModule } from './target/target.module';
 import { RequestModule } from './request/request.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+
 @Module({
   imports: [
     UserModule,
@@ -19,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'mysql',
       host: '127.0.0.1',
       port: 3306,
-      username: '',
+      username: 'root',
       password: '',
       database: 'drugit',
       entities: ['dist/**/*.entity{.ts,.js}'],
