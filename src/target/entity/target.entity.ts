@@ -1,4 +1,5 @@
 import { Request } from 'src/request/entity/request.entity';
+import { Result } from 'src/result/entity/result.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -41,4 +42,11 @@ export class Target {
     { cascade: true }
   )
   requests: Request[];
+
+  @OneToMany(
+    () => Result, 
+    (Result) => Result.target, 
+    { cascade: true }
+  )
+  results: Result[];
 }

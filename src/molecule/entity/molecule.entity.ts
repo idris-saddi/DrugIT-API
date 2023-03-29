@@ -1,4 +1,5 @@
 import { Request } from 'src/request/entity/request.entity';
+import { Result } from 'src/result/entity/result.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -59,5 +60,10 @@ export class Molecule {
     cascade: true,
   })
   requests: Request[];
+
+  @OneToMany(() => Request, (Request) => Request.molecule, {
+    cascade: true,
+  })
+  results: Result[];
 
 }

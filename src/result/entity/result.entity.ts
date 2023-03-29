@@ -1,12 +1,19 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { Molecule } from 'src/molecule/entity/molecule.entity';
+import { Target } from 'src/target/entity/target.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn,  } from 'typeorm';
 
 @Entity()
 export class Result {
-  @PrimaryColumn({})
-  targetID: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @PrimaryColumn({})
-  moleculeID: string;
+  @ManyToOne(() => Target, (Target) => Target.results)
+  @JoinColumn({ name: 'targetId' })
+  target: Target;
+
+  @ManyToOne(() => Molecule, (Molecule) => Molecule.results)
+  @JoinColumn({ name: 'moleculeId' })
+  molecule: Molecule;
 
   @Column({
     nullable: false,
@@ -18,4 +25,5 @@ export class Result {
     nullable: false,
   })
   created_at: string;
+
 }

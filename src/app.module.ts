@@ -19,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'mysql',
       host: '127.0.0.1',
       port: 3306,
-      username: 'root',
+      username: '',
       password: '',
       database: 'drugit',
       entities: ['dist/**/*.entity{.ts,.js}'],
