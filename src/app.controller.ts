@@ -5,8 +5,12 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  /*
+    * This method should check credentials and 
+    * check if user is authorized or not
+  */
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  IsAuthorized(): JSON {
+    return this.appService.IsAuthorized();
   }
 }
