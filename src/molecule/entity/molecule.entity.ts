@@ -12,8 +12,10 @@ import {
 @Entity()
 export class Molecule {
   //uuid
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn({
+    type : "bigint"  
+  })
+  id:number;
 
   @Column({
     nullable: false,
@@ -56,14 +58,10 @@ export class Molecule {
   })
   created_at: string;
 
-  @OneToMany(() => Request, (Request) => Request.molecule, {
-    cascade: true,
-  })
+  @OneToMany(() => Request, (Request) => Request.molecule)
   requests: Request[];
 
-  @OneToMany(() => Request, (Request) => Request.molecule, {
-    cascade: true,
-  })
+  @OneToMany(() => Request, (Request) => Request.molecule)
   results: Result[];
 
 }

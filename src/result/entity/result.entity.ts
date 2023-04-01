@@ -4,8 +4,10 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn,
 
 @Entity()
 export class Result {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn({
+    type : "bigint"  
+  })
+  id:number;
 
   @ManyToOne(() => Target, (Target) => Target.results)
   @JoinColumn({ name: 'targetId' })

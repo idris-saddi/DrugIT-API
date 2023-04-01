@@ -6,8 +6,10 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryG
 
 @Entity()
 export class Request {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+    @PrimaryGeneratedColumn({
+        type : "bigint"  
+      })
+      id:number;
 
     @ManyToOne(
         () => Molecule,
@@ -35,7 +37,7 @@ export class Request {
         enum: StatusEnum,
         default: StatusEnum.PENDING,
     })
-    status: string;
+    status: StatusEnum;
 
     @CreateDateColumn({
         nullable: false,

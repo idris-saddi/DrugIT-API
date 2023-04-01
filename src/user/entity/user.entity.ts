@@ -13,10 +13,13 @@ import {
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn({
+    type: 'bigint',
+  })
+  id: number;
 
   @Column({})
+  @Unique('username', ['username'])
   username: string;
 
   @Column({})
@@ -39,10 +42,10 @@ export class User {
     enum: RoleEnum,
     default: RoleEnum.CLIENT,
   })
-  role: string;
+  role: RoleEnum;
 
   @Column({})
-  subscription: string;
+  subscription: number;
 
   @Column({
     nullable: true,
@@ -69,10 +72,6 @@ export class User {
   })
   deleted_at: Date;
 
-  @OneToMany(
-    () => Request, 
-    (Request) => Request.user, 
-    { cascade: true }
-  )
+  @OneToMany(() => Request, (Request) => Request.user)
   requests: Request[];
 }

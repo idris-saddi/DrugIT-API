@@ -9,7 +9,14 @@ import { MoleculeModule } from './molecule/molecule.module';
 import { ResultModule } from './result/result.module';
 import { TargetModule } from './target/target.module';
 import { RequestModule } from './request/request.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/entity/user.entity';
+import { Target } from './target/entity/target.entity';
+import { Subscription } from './subscription/entity/subscription.entity';
+import { Result } from './result/entity/result.entity';
+import { Request } from './request/entity/request.entity';
+import { Molecule } from './molecule/entity/molecule.entity';
 
 
 
@@ -21,14 +28,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ResultModule,
     TargetModule,
     RequestModule,
+    SubscriptionModule,
     TypeOrmModule.forRoot({
       type: "mysql",
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT,10),
+      host: "localhost",
+      port: 3306,
       username: "root",
       password: "azerty",
-      database: process.env.DB_NAME,
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      database: "drugit",
+      entities: [User,Target,Subscription,Result,Request,Molecule],
       synchronize: true,
     }),
   ],
