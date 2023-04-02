@@ -10,7 +10,8 @@ export class AppController {
     * check if user is authorized or not
   */
   @Get()
-  IsAuthorized(): JSON {
+  IsAuthorized(): String {
     return this.appService.IsAuthorized();
   }
+
 }
