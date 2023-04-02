@@ -12,8 +12,10 @@ import {
 
 @Entity()
 export class Target {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn({
+    type: 'bigint',
+  })
+  id: number;
 
   @Column({})
   name: string;
@@ -36,17 +38,9 @@ export class Target {
   })
   deleted_at: Date;
 
-  @OneToMany(
-    () => Request, 
-    (Request) => Request.target, 
-    { cascade: true }
-  )
+  @OneToMany(() => Request, (Request) => Request.target)
   requests: Request[];
 
-  @OneToMany(
-    () => Result, 
-    (Result) => Result.target, 
-    { cascade: true }
-  )
+  @OneToMany(() => Result, (Result) => Result.target)
   results: Result[];
 }
