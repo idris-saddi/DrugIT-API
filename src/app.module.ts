@@ -17,6 +17,7 @@ import { Subscription } from './subscription/entity/subscription.entity';
 import { Result } from './result/entity/result.entity';
 import { Request } from './request/entity/request.entity';
 import { Molecule } from './molecule/entity/molecule.entity';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -29,6 +30,7 @@ import { Molecule } from './molecule/entity/molecule.entity';
     TargetModule,
     RequestModule,
     SubscriptionModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: "mysql",
       host: "localhost",
