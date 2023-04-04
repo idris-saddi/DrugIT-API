@@ -23,9 +23,13 @@ export class Result {
   })
   active: boolean;
 
+  @Column({
+    nullable: false,
+  })
+  confidence: number;
+
   @CreateDateColumn({
     nullable: false,
   })
   created_at: string;
-
 }
