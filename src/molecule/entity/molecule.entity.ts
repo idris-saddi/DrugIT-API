@@ -13,9 +13,9 @@ import {
 export class Molecule {
   //uuid
   @PrimaryGeneratedColumn({
-    type : "bigint"  
+    type: 'bigint',
   })
-  id:number;
+  id: number;
 
   @Column({
     nullable: false,
@@ -63,5 +63,4 @@ export class Molecule {
 
   @OneToMany(() => Request, (Request) => Request.molecule)
   results: Result[];
-
 }

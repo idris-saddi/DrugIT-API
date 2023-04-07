@@ -7,10 +7,11 @@ import { User } from 'src/user/entity/user.entity';
 
 @Global()
 @Module({
-  imports:[TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User])],
   providers: [
-    {useClass:AuthService,provide:"AUTH_SERVICE"}
-  , {useClass:UserService,provide:"USER_SERVICE"}],
-  controllers: [AuthController]
+    { useClass: AuthService, provide: 'AUTH_SERVICE' },
+    { useClass: UserService, provide: 'USER_SERVICE' },
+  ],
+  controllers: [AuthController],
 })
 export class AuthModule {}

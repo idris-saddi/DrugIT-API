@@ -5,10 +5,8 @@ import { TargetService } from './target.service';
 import { Target } from './entity/target.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Target]),
-  ],
+  imports: [TypeOrmModule.forFeature([Target])],
   controllers: [TargetController],
-  providers: [TargetService]
+  providers: [TargetService],
 })
 export class TargetModule {}

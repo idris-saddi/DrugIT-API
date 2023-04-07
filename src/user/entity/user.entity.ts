@@ -29,7 +29,9 @@ export class User {
   @Column({})
   password: string;
 
-  @Column({})
+  @Column({
+    default:"x"
+  })
   salt: string;
 
   @Column({
@@ -44,7 +46,9 @@ export class User {
   })
   role: RoleEnum;
 
-  @Column({})
+  @Column({
+    default:0
+  })
   subscription: number;
 
   @Column({
