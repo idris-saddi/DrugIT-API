@@ -22,5 +22,7 @@ export class GetUserDTO {
   @Exclude()
   deleted_at: Date;
 
-  constructor(partial : Partial<GetUserDTO>){Object.assign(this,partial)};
+  constructor(partial: Partial<GetUserDTO>) {
+    Object.assign(this, partial);
+  }
 }

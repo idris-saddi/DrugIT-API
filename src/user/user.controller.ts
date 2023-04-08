@@ -35,13 +35,13 @@ export class UserController {
     const { valid, reason, validators } = await validate(signupUserDto.email);
     if (valid) {
       // check if it's in the database or not
-      if (!await this.userservice.IsEmailUnique(signupUserDto.email)) {
+      if (!(await this.userservice.IsEmailUnique(signupUserDto.email))) {
         throw new HttpException(
           { message: 'email address used' },
           HttpStatus.BAD_REQUEST,
         );
       }
-      if (! await this.userservice.IsUsernameUnique(signupUserDto.username)) {
+      if (!(await this.userservice.IsUsernameUnique(signupUserDto.username))) {
         throw new HttpException(
           { message: 'username used' },
           HttpStatus.BAD_REQUEST,

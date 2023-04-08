@@ -12,13 +12,13 @@ import { TargetModule } from './target/target.module';
 import { RequestModule } from './request/request.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
 import { User } from './user/entity/user.entity';
 import { Target } from './target/entity/target.entity';
 import { Subscription } from './subscription/entity/subscription.entity';
 import { Result } from './result/entity/result.entity';
 import { Request } from './request/entity/request.entity';
 import { Molecule } from './molecule/entity/molecule.entity';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({

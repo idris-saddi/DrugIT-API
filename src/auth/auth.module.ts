@@ -1,17 +1,16 @@
-import { Global, Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { UserService } from '../user/user.service';
+import { Global, Module } from '@nestjs/common/decorators/modules';
+import { PassportModule } from '@nestjs/passport/dist';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/user/entity/user.entity';
+import { UserService } from 'src/user/user.service';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { LocalStrategy } from './utils/LocalStrategy';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
-  providers: [
-    { useClass: AuthService, provide: 'AUTH_SERVICE' },
-    { useClass: UserService, provide: 'USER_SERVICE' },
-  ],
+  imports: [TypeOrmModule.forFeature([User]), PassportModule],
   controllers: [AuthController],
+  providers: [AuthService, UserService, LocalStrategy],
 })
 export class AuthModule {}

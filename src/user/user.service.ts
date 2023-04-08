@@ -1,5 +1,6 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GetHashAndSalt } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
 import { GetUserDTO } from './dto/GetUser.dto';
 import { SignUpUserDTO } from './dto/SignUpUser.dto';
@@ -10,14 +11,16 @@ export class UserService {
   @InjectRepository(User)
   private readonly userRepository: Repository<User>;
 
-  
   public async getUser(id: number): Promise<GetUserDTO> {
-    const obj =  await this.userRepository.findOneBy({ id: id });
+    const obj = await this.userRepository.findOneBy({ id: id });
     return new GetUserDTO(obj);
   }
 
   public async CreateUser(signupUserDto: SignUpUserDTO) {
-    await this.userRepository.insert(this.userRepository.create(signupUserDto));
+    const { salt, password } = GetHashAndSalt(signupUserDto.password);
+    await this.userRepository.insert(
+      this.userRepository.create({ ...signupUserDto, password, salt }),
+    );
   }
 
   public async IsUsernameUnique(username: string): Promise<boolean> {
@@ -28,4 +31,14 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ email: email });
     return user === null;
   }
+
+  public async FindUser(param: string): Promise<User> {
+    let obj = isAnEmail(param) ? { email: param } : { username: param };
+    return await this.userRepository.findOneBy(obj);
+  }
+}
+function isAnEmail(str: string): boolean {
+  const regexExp =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+  return regexExp.test(str);
 }
