@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetHashAndSalt } from 'src/utils/bcrypt';
+import { CompareHashAndPass, GetHashAndSalt } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
 import { GetUserDTO } from './dto/GetUser.dto';
 import { SignUpUserDTO } from './dto/SignUpUser.dto';
@@ -35,6 +35,14 @@ export class UserService {
   public async FindUser(param: string): Promise<User> {
     let obj = isAnEmail(param) ? { email: param } : { username: param };
     return await this.userRepository.findOneBy(obj);
+  }
+  public async validateUser(token: string, password: string) {
+    const user = await this.FindUser(token);
+    if (!user || CompareHashAndPass(password, user.password, user.salt)) {
+      return null;
+    } else {
+      return user;
+    }
   }
 }
 function isAnEmail(str: string): boolean {

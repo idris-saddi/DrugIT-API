@@ -15,11 +15,14 @@ import { validate } from 'deep-email-validator';
 import { UserService } from './user.service';
 import { User } from './entity/user.entity';
 import { GetUserDTO } from './dto/GetUser.dto';
+import { CredentialsDTO } from './dto/Credentials.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('user')
 export class UserController {
   @Inject(UserService)
   private readonly userservice: UserService;
+  private readonly jwtService: JwtService;
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
@@ -59,5 +62,29 @@ export class UserController {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+  @Post('Login')
+  public async login(credentials: CredentialsDTO) {
+    const user = await this.userservice.validateUser(
+      credentials.token,
+      credentials.password,
+    );
+    if (!user) {
+      throw new HttpException(
+        {
+          message:
+            'User with given username or email not found or Wrong Password',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const payload = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+    };
+    const jwt = this.jwtService.sign(payload);
+    return { access_token: jwt };
   }
 }

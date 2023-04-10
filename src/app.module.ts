@@ -18,7 +18,6 @@ import { Subscription } from './subscription/entity/subscription.entity';
 import { Result } from './result/entity/result.entity';
 import { Request } from './request/entity/request.entity';
 import { Molecule } from './molecule/entity/molecule.entity';
-import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,7 +30,6 @@ import { AuthModule } from './auth/auth.module';
     TargetModule,
     RequestModule,
     SubscriptionModule,
-    AuthModule,
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (
