@@ -1,3 +1,6 @@
+# Local Storage in Server
+assets/*
+!assets/0.png
 # compiled output
 /dist
 /node_modules

@@ -18,12 +18,14 @@ import { Subscription } from './subscription/entity/subscription.entity';
 import { Result } from './result/entity/result.entity';
 import { Request } from './request/entity/request.entity';
 import { Molecule } from './molecule/entity/molecule.entity';
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: getEnvPath(`${__dirname}/../`),
       isGlobal: true,
     }),
+    MulterModule.register({ dest: '../assets' }),
     UserModule,
     MoleculeModule,
     ResultModule,

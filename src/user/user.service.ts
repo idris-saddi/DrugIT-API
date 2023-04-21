@@ -2,20 +2,49 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompareHashAndPass, GetHashAndSalt } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
-import { GetUserDTO } from './dto/GetUser.dto';
+import {
+  GetUserDTOForOtherUsers,
+  GetUserDTOForUserOrAdmin,
+} from './dto/GetUser.dto';
 import { SignUpUserDTO } from './dto/SignUpUser.dto';
 import { User } from './entity/user.entity';
+import { unlinkSync } from 'fs';
 
 @Injectable()
 export class UserService {
   @InjectRepository(User)
   private readonly userRepository: Repository<User>;
-
-  public async getUser(id: number): Promise<GetUserDTO> {
-    const obj = await this.userRepository.findOneBy({ id: id });
-    return new GetUserDTO(obj);
+  public async getImage(id: number) {
+    const { image } = await this.userRepository.findOneBy({ id: id });
+    return image;
   }
-
+  public async saveImage(id: number, file: Express.Multer.File) {
+    const image = await this.getImage(id);
+    if (image != '0.png') {
+      unlinkSync('../../assets/' + image);
+    }
+    await this.userRepository.update({ id: id }, { image: file.originalname });
+  }
+  public async removeImage(id: number) {
+    const image = await this.getImage(id);
+    if (image != '0.png') {
+      unlinkSync('../../assets/' + image);
+    }
+    await this.userRepository.update({ id: id }, { image: '0.png' });
+  }
+  public async getUser(
+    id: number,
+    forPrivate: boolean,
+  ): Promise<GetUserDTOForOtherUsers | GetUserDTOForUserOrAdmin> {
+    const obj = await this.userRepository.findOneBy({ id: id });
+    if (forPrivate) return new GetUserDTOForUserOrAdmin(obj);
+    else {
+      return new GetUserDTOForOtherUsers(obj);
+    }
+  }
+  public async getUserAllUsers(): Promise<GetUserDTOForUserOrAdmin[]> {
+    return await this.userRepository.find();
+  }
   public async CreateUser(signupUserDto: SignUpUserDTO) {
     const { salt, password } = GetHashAndSalt(signupUserDto.password);
     await this.userRepository.insert(
@@ -43,6 +72,9 @@ export class UserService {
     } else {
       return user;
     }
+  }
+  public async deleteUser(id: number) {
+    await this.userRepository.softDelete(id);
   }
 }
 function isAnEmail(str: string): boolean {

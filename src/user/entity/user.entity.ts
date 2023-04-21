@@ -29,9 +29,7 @@ export class User {
   @Column({})
   password: string;
 
-  @Column({
-    default: 'x',
-  })
+  @Column({})
   salt: string;
 
   @Column({
@@ -52,7 +50,7 @@ export class User {
   subscription: number;
 
   @Column({
-    nullable: true,
+    default: '0.png',
   })
   image: string;
 
