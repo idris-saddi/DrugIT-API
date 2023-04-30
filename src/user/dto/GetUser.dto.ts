@@ -27,14 +27,14 @@ export class GetUserDTOForUserOrAdmin {
   }
 }
 export class GetUserDTOForOtherUsers {
+  id: number;
   username: string;
   email: string;
   organization: string;
-  role: RoleEnum;
   phone: string;
 
   @Exclude()
-  id: number;
+  role: RoleEnum;
   @Exclude()
   password: string;
   @Exclude()

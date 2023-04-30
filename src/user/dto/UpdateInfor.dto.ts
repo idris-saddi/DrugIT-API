@@ -1,4 +1,3 @@
-import { RoleEnum } from '../../enum/Role.enum';
 import {
   IsEmail,
   IsNotEmpty,
@@ -8,17 +7,21 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SignUpUserDTO {
+export class UpdateInfoDTO {
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @MinLength(6)
   username: string;
 
   @IsEmail()
+  @IsNotEmpty()
+  @IsOptional()
   email: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   @MinLength(8)
   password: string;
 
@@ -31,4 +34,5 @@ export class SignUpUserDTO {
   @IsNotEmpty()
   @IsOptional()
   phone: string;
+
 }

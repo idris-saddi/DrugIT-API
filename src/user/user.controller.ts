@@ -11,9 +11,7 @@ import {
   Param,
   Post,
   Put,
-  Req,
   Res,
-  StreamableFile,
   UnauthorizedException,
   UploadedFile,
   UseGuards,
@@ -34,20 +32,19 @@ import { extname, join } from 'path';
 import { JwtAuthGuard } from './guards/jwtpassport.guard';
 import { User } from 'src/decorators/user.decorator';
 import { RoleEnum as Role, RoleEnum } from 'src/enum/Role.enum';
-import path from 'path';
-import { readdir } from 'fs/promises';
-import { createReadStream } from 'fs';
 import type { Response } from 'express';
+import { UpdateInfoDTO } from './dto/UpdateInfor.dto';
+import { GetHashAndSalt } from 'src/utils/bcrypt';
 
 // File formats allowed here.
 const array_of_allowed_file_types = ['image/png', 'image/jpeg', 'image/jpg'];
 // Allowed file size in MB
 const allowed_file_size = 5;
-const currentWorkingDirectory = process.cwd();
 @Controller('user')
 export class UserController {
   @Inject(UserService)
   private readonly userservice: UserService;
+  @Inject(JwtService)
   private readonly jwtService: JwtService;
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -59,8 +56,8 @@ export class UserController {
     else throw new NotFoundException('page not found');
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
   public async getUser(
     @Param('id') id: number,
@@ -72,19 +69,10 @@ export class UserController {
     else throw new NotFoundException('user with this id can not be found');
   }
   @Get('picture/:id')
-  async getFile(
-    @Res({ passthrough: true }) res: Response,
-    @Param('id') id: number,
-  ): Promise<StreamableFile> {
+  @UseGuards(JwtAuthGuard)
+  async getFile(@Res() res: Response, @Param('id') id: number) {
     const image = await this.userservice.getImage(id);
-    const file = createReadStream(
-      join(currentWorkingDirectory, './assets/' + image),
-    );
-    res.set({
-      'Content-Type': `image/${extname(image)}`,
-      'Content-Disposition': `attachment; filename="${image}"`,
-    });
-    return new StreamableFile(file);
+    res.sendFile(join(__dirname, '../../assets/', image));
   }
 
   @Post('signup')
@@ -92,16 +80,21 @@ export class UserController {
     //  prevents spammers from signing up using disposable email
     // prevent fake people from registering
     // Uses the library "deep-email-validator"
-    const { valid, reason, validators } = await validate(signupUserDto.email);
+    const ValidationResult = validate(signupUserDto.email);
+    const UsernameUniquness = this.userservice.IsUsernameUnique(
+      signupUserDto.username,
+    );
+    const EmailUniquness = this.userservice.IsEmailUnique(signupUserDto.email);
+    const { valid, reason, validators } = await ValidationResult;
     if (valid) {
       // check if it's in the database or not
-      if (!(await this.userservice.IsEmailUnique(signupUserDto.email))) {
+      if (!(await EmailUniquness)) {
         throw new HttpException(
           { message: 'email address used' },
           HttpStatus.BAD_REQUEST,
         );
       }
-      if (!(await this.userservice.IsUsernameUnique(signupUserDto.username))) {
+      if (!(await UsernameUniquness)) {
         throw new HttpException(
           { message: 'username used' },
           HttpStatus.BAD_REQUEST,
@@ -122,7 +115,7 @@ export class UserController {
   }
 
   @Post('Login')
-  public async login(credentials: CredentialsDTO) {
+  public async login(@Body() credentials: CredentialsDTO) {
     const user = await this.userservice.validateUser(
       credentials.token,
       credentials.password,
@@ -147,8 +140,68 @@ export class UserController {
   }
 
   @Put('ProfileInfo')
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
-  public async updateProfileInfo(@User() User) {}
+  public async updateProfileInfo(
+    @User() User,
+    @Body() info: UpdateInfoDTO,
+  ): Promise<GetUserDTOForUserOrAdmin> {
+    const { email, username, password, organization, phone } = info;
+    let updateObject: {
+      email?: string;
+      username?: string;
+      password?: string;
+      salt?:string;
+      organization?: string;
+      phone?: string;
+    } = {};
+    
+    if (password) {
+      const pass = GetHashAndSalt(password);
+      updateObject.password = pass.password;
+      updateObject.salt = pass.salt;
+    }
+    if (organization) {
+      updateObject.organization = organization;
+    }
+    if (phone) {
+      updateObject.phone = phone;
+    }
+    if (email) {
+      const ValidationResult = validate(email);
+      const EmailUniquness = this.userservice.IsEmailUnique(email);
+      const { valid, reason, validators } = await ValidationResult;
+      if (valid) {
+        if (await EmailUniquness) {
+          updateObject.email = email;
+        } else {
+          throw new HttpException(
+            { message: 'email address used' },
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      } else {
+        throw new HttpException(
+          {
+            message: 'Please provide a valid email address.',
+            reason: validators[reason].reason,
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+    if (username) {
+      if (await this.userservice.IsUsernameUnique(username)) {
+        updateObject.username = username;
+      } else {
+        throw new HttpException(
+          { message: 'username used' },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+    return await this.userservice.UpdateUserInfo(User.id, updateObject);
+  }
 
   @Put('Picture')
   @UseGuards(JwtAuthGuard)
@@ -163,8 +216,10 @@ export class UserController {
             .fill(null)
             .map(() => Math.round(Math.random() * 16).toString(16))
             .join('');
-          callback(null, `${name}${randomName}.${fileExtName}`);
+          const n = `${name}${randomName}${fileExtName}`;
+          callback(null, n);
         },
+        destination: './assets',
       }),
       fileFilter: (req, file, callback) => {
         if (
@@ -184,7 +239,7 @@ export class UserController {
     @User() User,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    await this.userservice.saveImage(User.id, file);
+    await this.userservice.saveImage(User.id, file.filename);
   }
 
   @Delete('Picture')

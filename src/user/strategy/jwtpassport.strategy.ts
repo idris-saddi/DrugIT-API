@@ -12,7 +12,7 @@ import { UnauthorizedException } from '@nestjs/common';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   @InjectRepository(User)
   private readonly userRepository: Repository<User>;
-  constructor(private readonly config: ConfigService) {
+  constructor(@Inject(ConfigService) private readonly config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,

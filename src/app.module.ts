@@ -25,7 +25,7 @@ import { MulterModule } from '@nestjs/platform-express';
       envFilePath: getEnvPath(`${__dirname}/../`),
       isGlobal: true,
     }),
-    MulterModule.register({ dest: '../assets' }),
+    MulterModule.register({ dest: './assets' }),
     UserModule,
     MoleculeModule,
     ResultModule,
