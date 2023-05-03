@@ -16,7 +16,6 @@ import { Result } from 'src/result/entity/result.entity';
     TypeOrmModule.forFeature([Target]),
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([Result]),
-
   ],
   controllers: [RequestController],
   providers: [RequestService, ResultService],

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRequestDTO } from './dto/CreateRequestDTO.dto';
 import { Request } from './entity/request.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -94,7 +98,9 @@ export class RequestService {
       await this.requestRepository.delete(id);
     else throw new NotFoundException('request with this id is not found');
   }
-  async createRequest(NewRequest: CreateRequestDTO) {
+  async createRequest(NewRequest: CreateRequestDTO, id: number) {
+    if (NewRequest.user != id)
+      throw new BadRequestException('not matching information');
     const user = this.UserRepository.findOneBy({ id: NewRequest.user });
     const molecule = this.MoleculeRepository.findOneBy({
       id: NewRequest.molecule,
@@ -102,6 +108,8 @@ export class RequestService {
     const target = this.TargetRepository.findOneBy({ id: NewRequest.target });
     if (!(await user))
       throw new NotFoundException('user with this id is not found!');
+    if ((await user).subscription == 0)
+      throw new BadRequestException('You have no more subscription!!');
     if (!(await molecule))
       throw new NotFoundException('molecule with this id is not found!');
     if (!(await target))
@@ -115,6 +123,10 @@ export class RequestService {
         status: NewRequest.status,
       }),
     );
+    if ((await user).subscription > 0)
+      await this.UserRepository.update(id, {
+        subscription: (await user).subscription - 1,
+      });
   }
 
   async GetByUserMolTarget(id: number, Targetid: number, Molid: number) {

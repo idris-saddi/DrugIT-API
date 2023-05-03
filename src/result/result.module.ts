@@ -16,9 +16,8 @@ import { User } from 'src/user/entity/user.entity';
     TypeOrmModule.forFeature([Molecule]),
     TypeOrmModule.forFeature([Target]),
     TypeOrmModule.forFeature([User]),
-
   ],
   controllers: [ResultController],
-  providers: [ResultService,RequestService],
+  providers: [ResultService, RequestService],
 })
 export class ResultModule {}

@@ -52,8 +52,8 @@ export class RequestController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  public async sendRequest(@Body() NewRequest: CreateRequestDTO) {
-    await this.requestService.createRequest(NewRequest);
+  public async sendRequest(@User() user, @Body() NewRequest: CreateRequestDTO) {
+    await this.requestService.createRequest(NewRequest, user.id);
   }
 
   @Delete(':id')
