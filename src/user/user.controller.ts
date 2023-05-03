@@ -151,11 +151,11 @@ export class UserController {
       email?: string;
       username?: string;
       password?: string;
-      salt?:string;
+      salt?: string;
       organization?: string;
       phone?: string;
     } = {};
-    
+
     if (password) {
       const pass = GetHashAndSalt(password);
       updateObject.password = pass.password;

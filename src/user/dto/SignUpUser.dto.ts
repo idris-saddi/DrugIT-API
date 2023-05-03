@@ -1,4 +1,3 @@
-import { RoleEnum } from '../../enum/Role.enum';
 import {
   IsEmail,
   IsNotEmpty,

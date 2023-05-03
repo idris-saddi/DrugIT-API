@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -20,12 +21,15 @@ export class Request {
   id: number;
 
   @ManyToOne(() => Molecule, (Molecule) => Molecule.requests)
+  @JoinColumn()
   molecule: Molecule;
 
   @ManyToOne(() => Target, (Target) => Target.requests)
+  @JoinColumn()
   target: Target;
 
   @ManyToOne(() => User, (User) => User.requests, { cascade: true })
+  @JoinColumn()
   user: User;
 
   @Column({

@@ -8,6 +8,7 @@ import {
   DeleteDateColumn,
   Entity,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -39,8 +40,10 @@ export class Target {
   deleted_at: Date;
 
   @OneToMany(() => Request, (Request) => Request.target)
+  @JoinColumn()
   requests: Request[];
 
   @OneToMany(() => Result, (Result) => Result.target)
+  @JoinColumn()
   results: Result[];
 }

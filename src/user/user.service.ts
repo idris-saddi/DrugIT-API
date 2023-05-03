@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompareHashAndPass, GetHashAndSalt } from 'src/utils/bcrypt';
-import { ObjectType, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
   GetUserDTOForOtherUsers,
   GetUserDTOForUserOrAdmin,
@@ -12,14 +12,19 @@ import { unlinkSync } from 'fs';
 
 @Injectable()
 export class UserService {
-  async UpdateUserInfo(id: number, updateObject):Promise<GetUserDTOForUserOrAdmin> {
-    const user = await this.userRepository.findOneBy({id:id});
-    const updated = {...user,...updateObject};
-    await this.userRepository.update({id:id},updated);
-    return new GetUserDTOForUserOrAdmin(updated);
-  }
   @InjectRepository(User)
   private readonly userRepository: Repository<User>;
+
+  async UpdateUserInfo(
+    id: number,
+    updateObject,
+  ): Promise<GetUserDTOForUserOrAdmin> {
+    const user = await this.userRepository.findOneBy({ id: id });
+    const updated = { ...user, ...updateObject };
+    await this.userRepository.update({ id: id }, updated);
+    return new GetUserDTOForUserOrAdmin(updated);
+  }
+
   public async getImage(id: number) {
     const { image } = await this.userRepository.findOneBy({ id: id });
     return image;
@@ -72,7 +77,7 @@ export class UserService {
     return await this.userRepository.findOneBy(obj);
   }
   public async validateUser(token: string, password: string) {
-    const user = await this.FindUser(token);    
+    const user = await this.FindUser(token);
     if (!user || !CompareHashAndPass(password, user.password, user.salt)) {
       return null;
     } else {

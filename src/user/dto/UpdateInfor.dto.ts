@@ -34,5 +34,4 @@ export class UpdateInfoDTO {
   @IsNotEmpty()
   @IsOptional()
   phone: string;
-
 }

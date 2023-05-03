@@ -9,6 +9,7 @@ import {
   Entity,
   Unique,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -45,7 +46,7 @@ export class User {
   role: RoleEnum;
 
   @Column({
-    default: 0,
+    default: 100,
   })
   subscription: number;
 
@@ -75,5 +76,6 @@ export class User {
   deleted_at: Date;
 
   @OneToMany(() => Request, (Request) => Request.user)
+  @JoinColumn()
   requests: Request[];
 }
