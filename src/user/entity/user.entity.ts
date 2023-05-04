@@ -9,6 +9,7 @@ import {
   Entity,
   Unique,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -44,11 +45,13 @@ export class User {
   })
   role: RoleEnum;
 
-  @Column({})
+  @Column({
+    default: 100,
+  })
   subscription: number;
 
   @Column({
-    nullable: true,
+    default: '0.png',
   })
   image: string;
 
@@ -73,5 +76,6 @@ export class User {
   deleted_at: Date;
 
   @OneToMany(() => Request, (Request) => Request.user)
+  @JoinColumn()
   requests: Request[];
 }

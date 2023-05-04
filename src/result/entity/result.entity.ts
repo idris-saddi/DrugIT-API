@@ -1,13 +1,21 @@
 import { Molecule } from 'src/molecule/entity/molecule.entity';
 import { Target } from 'src/target/entity/target.entity';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn,  } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Result {
   @PrimaryGeneratedColumn({
-    type : "bigint"  
+    type: 'bigint',
   })
-  id:number;
+  id: number;
 
   @ManyToOne(() => Target, (Target) => Target.results)
   @JoinColumn({ name: 'targetId' })

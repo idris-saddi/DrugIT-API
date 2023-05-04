@@ -15,12 +15,12 @@ export class Subscription {
   id: number;
 
   @Column()
-  @Unique("name",["name"])
+  @Unique('name', ['name'])
   name: string;
 
   @Column()
   price: number;
 
   @Column()
-  numberOfTests: number
+  numberOfTests: number;
 }
