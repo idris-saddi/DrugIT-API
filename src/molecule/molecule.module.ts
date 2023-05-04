@@ -5,10 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Molecule } from './entity/molecule.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Molecule]),
-  ],
+  imports: [TypeOrmModule.forFeature([Molecule])],
   controllers: [MoleculeController],
-  providers: [MoleculeService]
+  providers: [MoleculeService],
 })
 export class MoleculeModule {}
