@@ -1,5 +1,6 @@
 import { Request } from 'src/request/entity/request.entity';
 import { Result } from 'src/result/entity/result.entity';
+
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -8,7 +9,6 @@ import {
   DeleteDateColumn,
   Entity,
   OneToMany,
-  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -27,23 +27,21 @@ export class Target {
   @CreateDateColumn({
     nullable: false,
   })
-  created_at: Date;
+  created_at: string;
 
   @UpdateDateColumn({
     nullable: true,
   })
-  updated_at: Date;
+  updated_at: string;
 
   @DeleteDateColumn({
     nullable: true,
   })
-  deleted_at: Date;
+  deleted_at: string;
 
   @OneToMany(() => Request, (Request) => Request.target)
-  @JoinColumn()
   requests: Request[];
 
   @OneToMany(() => Result, (Result) => Result.target)
-  @JoinColumn()
   results: Result[];
 }

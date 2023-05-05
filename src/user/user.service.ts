@@ -76,8 +76,8 @@ export class UserService {
     let obj = isAnEmail(param) ? { email: param } : { username: param };
     return await this.userRepository.findOneBy(obj);
   }
-  public async validateUser(token: string, password: string) {
-    const user = await this.FindUser(token);
+  public async validateUser(email: string, password: string) {
+    const user = await this.FindUser(email);
     if (!user || !CompareHashAndPass(password, user.password, user.salt)) {
       return null;
     } else {

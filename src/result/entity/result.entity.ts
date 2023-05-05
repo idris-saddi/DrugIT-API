@@ -1,3 +1,4 @@
+
 import { Molecule } from 'src/molecule/entity/molecule.entity';
 import { Target } from 'src/target/entity/target.entity';
 import {
@@ -6,7 +7,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -18,11 +18,11 @@ export class Result {
   id: number;
 
   @ManyToOne(() => Target, (Target) => Target.results)
-  @JoinColumn({ name: 'targetId' })
+  @JoinColumn({ name: 'target_id' })
   target: Target;
 
   @ManyToOne(() => Molecule, (Molecule) => Molecule.results)
-  @JoinColumn({ name: 'moleculeId' })
+  @JoinColumn({ name: 'molecule_id' })
   molecule: Molecule;
 
   @Column({

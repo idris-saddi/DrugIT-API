@@ -1,3 +1,4 @@
+
 import { StatusEnum } from 'src/enum/Status.enum';
 import { Molecule } from 'src/molecule/entity/molecule.entity';
 import { Target } from 'src/target/entity/target.entity';
@@ -21,15 +22,15 @@ export class Request {
   id: number;
 
   @ManyToOne(() => Molecule, (Molecule) => Molecule.requests)
-  @JoinColumn()
+  @JoinColumn({ name: 'molecule_id' })
   molecule: Molecule;
 
   @ManyToOne(() => Target, (Target) => Target.requests)
-  @JoinColumn()
+  @JoinColumn({ name: 'target_id' })
   target: Target;
 
   @ManyToOne(() => User, (User) => User.requests, { cascade: true })
-  @JoinColumn()
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @Column({

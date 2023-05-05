@@ -45,7 +45,7 @@ export class TargetController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   public async GetAllTargets(@User() user) {
-    if (user.role == RoleEnum.ADMIN) {
+    if (user.role == RoleEnum.ADMIN || user.role == RoleEnum.CLIENT) {
       return await this.targetService.GetAllTarget();
     } else throw new NotFoundException();
   }

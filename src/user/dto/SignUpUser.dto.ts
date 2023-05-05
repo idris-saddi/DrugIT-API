@@ -10,7 +10,7 @@ import {
 export class SignUpUserDTO {
   @IsString()
   @IsNotEmpty()
-  @MinLength(6)
+  @MinLength(3)
   username: string;
 
   @IsEmail()

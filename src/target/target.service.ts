@@ -28,19 +28,28 @@ export class TargetService {
     const res = await this.targetRepository.find();
     const ret = [];
     res.forEach((e) => {
-      ret.push(new GetTargetDTO(e));
+      ret.push(new GetTargetDTO({id:e.id,description:e.description,name:e.name}));
     });
-    return res;
+    return ret;
   }
   async GetTarget(id: number) {
-    return new GetTargetDTO(await this.targetRepository.findOneBy({ id: id }));
+    const ret = await this.targetRepository.findOneBy({ id: id });
+    return new GetTargetDTO({id:ret.id,description:ret.description,name:ret.name});
   }
   async CreateTarget(name: string, description: string) {
+    
+    console.log(this.targetRepository);
     await this.targetRepository.insert(
       await this.targetRepository.create({
         name: name,
         description: description,
       }),
     );
+
+    // const t =  this.targetRepository.create({
+    //       name: name,
+    //       description: description,
+    //     });
+    //     await this.targetRepository.save(t);
   }
 }

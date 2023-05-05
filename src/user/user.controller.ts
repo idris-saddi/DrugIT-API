@@ -117,7 +117,7 @@ export class UserController {
   @Post('Login')
   public async login(@Body() credentials: CredentialsDTO) {
     const user = await this.userservice.validateUser(
-      credentials.token,
+      credentials.email,
       credentials.password,
     );
     if (!user) {

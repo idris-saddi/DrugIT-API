@@ -1,0 +1,140 @@
+-- MoleculeController
+
+Post : /molecule/
+createMol
+
+Put : /molecule/:id
+ModifyMol
+
+Get : /molecule/
+GetAllMol
+
+Get : /molecule/:id
+GetMol
+
+
+________________________________________
+-- RequestController
+
+Get : /request/:id
+getRequest
+
+Get : /:id/result/
+getRequestResult
+
+Post : /request/
+sendRequest
+
+Delete : /request/:id
+deleteRequest
+
+Get : /request/target/:targetId/all
+getByTarget
+
+Get : /request/target/:targetId/:id
+getByTargetByUser
+
+Get : /request/molecule/:Molid/all
+getByMolecule
+
+Get : /request/molecule/:Molid/:Userid
+getByMoleculeByUser
+
+Get : /request/user/:id
+getAllByUser
+
+Get : /request/
+getAll
+
+
+
+________________________________________
+-- ResultController
+
+
+Get : /result/:id
+getResult
+
+Get : /result/molecule/:id
+getALLResultForMol
+
+Get : /result/target/:id
+getALLResultForTarget
+
+Post : /result/search/
+getResultByMolandTarget (in the Body)
+
+Get : /result/all/
+getAll
+
+Put : /result/:id
+UpdateById
+
+Put : /result/
+UpdatebyMolAndTarget
+
+
+
+________________________________________
+-- SubscriptionController
+
+Put : /subscription/Pro
+Put : /subscription/Entreprise
+Put : /subscription/Free
+
+
+
+________________________________________
+-- TargetController
+
+Post : /target/
+CreateTarget
+
+Get : /target/:id
+GetTarget
+
+Get : /target/all
+GetAllTargets
+
+Put : /target/:id
+updateTaget
+
+Delete : /target/:id
+deleteTarget
+
+
+
+________________________________________
+-- UserController
+
+Get : /user/admin/
+getAllUsers
+
+
+Get : /user/:id
+getUser
+
+
+Get : /user/picture/:id
+getFile
+
+Get : /user/signup/
+signup
+
+Get : /user/Login/
+login
+
+Put : /user/ProfileInfo/
+updateProfile
+
+Put : /user/Picture/
+updateProfilePicture
+
+Delete : /user/Picture/
+deleteProfilePicture
+
+Delete : /user/:id
+deleteUser
+
+
+
